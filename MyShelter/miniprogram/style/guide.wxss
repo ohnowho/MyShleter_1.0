@@ -1,0 +1,136 @@
+/* guide section */
+
+.guide-view {
+
+}
+.guide-header {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  margin-left:2%;
+  margin-right: 2%;
+  padding: 2%;
+  width: 92%;
+  color:#7c7c7c;
+  border-radius: 6px;
+}
+.guide-steps {
+  display: block;
+  border-radius: 6px;
+  margin: 2%;
+  padding: 2%;
+  padding-bottom: 0;
+  background: #fff;
+}
+.guide-step {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-around; */
+  font-size: 13px;
+  color: #7c7c7c;
+  background: #fff;
+  border-bottom: 1px solid antiquewhite;
+}
+.guide-step .step-ins {
+  width: 100%;
+  /* height: 70px; */
+ 
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  /* justify-content: center; */
+}
+.guide-step image {
+  width: 42px;
+  height: 30px;
+  margin: 10px;
+  padding: 6px;
+  border-radius: 50%;
+  background: rgb(91, 172, 161);
+}
+.guide-step .step-start {
+  width: 52px;
+  height: 40px;
+  margin: 10px;
+  padding: 0px;
+  background: #fff;
+}
+.guide-step .step-end {
+  width: 52px;
+  height: 40px;
+  margin: 10px;
+  padding: 0px;
+  background: #fff;
+}
+.guide-step .step-goahead {
+}
+.guide-step .step-biasright {
+}
+.guide-step .step-turnright {
+
+}
+.guide-step .step-biasleft {
+  transform: rotateY(180deg);
+}
+.guide-step .step-turnleft {
+  transform: rotateY(180deg);
+}
+
+.guide-step .step-dir {
+  display: none;
+  background: rgb(91, 172, 161);
+  padding: 6px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  vertical-align: center;
+}
+
+.map-guide-wrap {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left:2%;
+  margin-right: 2%;
+  padding: 2%;
+  width: 92%;
+  height: 36px;
+  margin: 10px;
+  color:#7c7c7c;
+  border-radius: 6px;
+}
+.map-guide-back {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.map-guide-distance {
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+}
+.map-guide-unfold {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+
+.map-guide-p{
+  display: flex;
+  align-items: center;
+}
+
+.map-guide-image {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+}
+.map-guide-image.map-guide-drive{
+  display: inline-block;
+  width: 33px;
+  height: 33px;
+}

@@ -1,0 +1,260 @@
+<view class="container">
+    <view hidden='{{searchhide}}'>
+      <div class='wrap-search' bindtap='toSearch'>
+        <span class="district-span {{ mapview }}"  >{{ district ? districtArr[city][district] : cityArr[city].name }}</span>
+        <image class="search-back {{ !mapview }}" src='../../images/back.png' catchtap="cancelSearch"></image>
+        <input disabled="{{ listhide }}" bindinput="bindSearchInput" bindconfirm="handleTapSearch" class="search-input"></input>
+        <span  class="search-btn" bindtap="handleTapSearch"><image src='../../images/search.png'></image></span>
+      </div>
+    </view>
+    <view hidden="{{ mapGuide === false }}" class="map-guide-wrap">
+        <image wx:if="{{ guidehide }}" class="map-guide-back" bindtap="mapGuideCancel" src="../../images/back.png" />
+        <image wx:if="{{ guidehide === false }}" class="map-guide-back" bindtap="toMapGuide" src="../../images/back.png" />
+        <p class="map-guide-p" bindtap="toGuide">
+          <image wx:if="{{ currRoute.mode === 'DRIVING'}}" class="map-guide-drive map-guide-image"  src="../../images/driving.png" />
+          <image wx:if="{{ currRoute.mode === 'WALKING'}}" class="map-guide-walk map-guide-image"  src="../../images/walk-hurry.png" />
+          <span class="guide-span" style="margin-left:10px;">{{ currRoute.distance/1000 }}km 约{{ currRoute.duration }}分钟</span>
+        </p>
+        <image bindtap="handleTapSwitch" class="map-guide-switch map-guide-image" src="../../images/switch.png" />
+    </view>
+    <view hidden="{{ mapview === false }}" class='wrap-map'>
+      <map
+      id="myMap"
+      longitude="{{ longitude }}" latitude="{{ latitude }}"
+      scale='{{ scale }}'
+      enable-zoom='{{ wayfound }}'
+      enable-scroll='{{ wayfound }}'
+      show-location="true"
+      subkey="{{ sdkkey }}"
+      bindmarkertap="handleTapMarker"
+      bindcallouttap="handleTapBubble"
+      polyline="{{polyline}}"
+      markers="{{ markers }}">
+        <cover-view class="detect-wrap">
+          <cover-view hidden="{{ detectEnable === false }}" class="map-cover" bindtap="searchInRegion">
+            <cover-image class="map-detect-img" src="../../images/radar.png" />
+          </cover-view>
+        </cover-view>
+        <cover-view hidden="{{ starthidden }}" class="startpoint-cover-wrap ">
+          <cover-view class="map-cover" bindtap="searchInRegion">
+            <cover-image class="map-startpoint-img" src="../../images/start.png" />
+          </cover-view>
+        </cover-view>
+        <cover-view class="left-cover-wrap ">
+          <cover-view hidden="{{ starthidden === false }}" class="map-cover" bindtap="handleActiveStart">
+            <cover-image class="map-start-img" src="../../images/start.png" />
+          </cover-view>
+          <cover-view hidden="{{ starthidden }}" class="map-cover" bindtap="handleConfirmStart">
+            <cover-image class="map-start-img start-active" src="../../images/start.png" />
+          </cover-view>
+          <cover-view class="map-cover" bindtap="backToLoc">
+            <cover-image class="map-location-img" src="../../images/userlocation.png" />
+          </cover-view>
+        </cover-view>
+        <cover-view class="right-cover-wrap ">
+          <cover-view class="map-cover" bindtap="toProfile">
+            <cover-image class="map-profile-img" src="../../images/profile.png" />
+          </cover-view>
+        </cover-view>
+      </map>
+    </view>
+    <view hidden="{{ listhide }}">
+      <div class="wrap-district">
+        <p class="district-p" bindtap="toPickDistrict">
+          <image src="../../images/location.png"></image>
+          <span>{{ cityArr[city].name }}市</span><span>{{ districtArr[city][district] }}</span>
+        </p>
+        <div  class="district-pick {{ districtPicking }}">
+          <p class="city-options">
+              <span 
+              class="option-{{ index === city }}"
+              bindtap="pickCity"
+              data-id="{{ index }}"
+              wx:for="{{ cityArr }}" 
+              wx:key="index" >{{ item.name }}</span>
+          </p>
+          <div class="district-options">
+              <span class="option-{{ index === district }}"
+              bindtap="pickDist"
+              data-id="{{ index }}"
+              wx:for="{{ districtArr[city] }}" 
+              wx:key="index" >{{ item }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="empty-tip {{ searchList.length === 0 }}">
+          <image src='../../images/empty.png'></image>
+      </div>
+      <div class="wrap-list">
+        <div class='wrap-item'
+            wx:for="{{ searchList }}" 
+            wx:key="index"
+            bindtap='moveToSelected'
+            data-id='{{ index }}' >
+          <image src='../../images/tent.png' class='item-img'></image>
+          <div class='item-div'>
+            <p class='item-name'>{{ item.name }}</p>
+            <p class='item-addr'>{{ item.full_address }}</p>
+          </div>
+        </div>
+        <p class="moreloading {{ moreloading }}">
+          <image src="../../images/loading.gif"></image>
+        </p>
+      </div>
+      <view hidden="{{ toTopFade === false }}" class='list-totop list-totop-view'>
+        <image  class='list-totop' bindtap="toTop" src='../../images/totop.png'></image>
+      </view>
+    </view>
+    <view class="autoloading" hidden="{{ !loading }}">
+      <div>
+        <image src="../../images/loading.gif"></image>
+      </div>
+    </view>
+    <view class="detail-view" hidden='{{ detailhide }}'>
+      <div class='detail-wrap'>
+        <div class="detail-header-wrap">
+          <image class='detail-back' bindtap="toMap" src='../../images/back.png'></image>
+          <span class="detail-distance">
+            <span>{{ detail.distance/1000 }}km</span>
+            <image class='detail-go' bindtap="handleTapGo" src='../../images/plane.png'></image>
+          </span>
+          <image class='detail-star {{ collected === true }}' bindtap="detailStar" src='../../images/star.png'></image>
+          <image class='detail-star {{ collected === false }}' bindtap="detailStar" src='../../images/starfalse.png'></image>
+        </div>
+        <div class="scroll-wrap">
+          <div class='detail-ul'>
+            <div class='detail-li'>
+              <p class='detail-li-h6'><span></span>{{ detail.name }}</p>
+              <p class='detail-p {{ detail.type !== "NULL" && detail.type !== ""  }}'>
+                <span class='tag-wrap'><span class="detail-tag">类型</span></span>
+                <span class="detail-span">{{ detail.type }}</span>
+              </p>
+              <p class='detail-p {{ detail.postcode !== "NULL" && detail.postcode !== "" }}'>
+                <span class='tag-wrap'><span class="detail-tag">邮政编码</span></span>
+                <span class="detail-span">{{ detail.postcode }}</span>
+              </p>
+              <p class='detail-p {{ detail.tel !== "NULL" && detail.tel !== "" }}'>
+                <span class='tag-wrap'><span class="detail-tag">联系电话</span></span>
+                <span class="detail-span">{{ detail.tel }}</span>
+              </p>
+              <p class='detail-p {{ detail.service !== "NULL" && detail.service !== "" }}'>
+                 <span class='tag-wrap'><span class="detail-tag">服务内容</span></span>
+                <span class="detail-span">{{ detail.service }}</span>
+              </p>
+              <p class='detail-p {{ detail.service_time !== "NULL" && detail.service_time !== "" }}'>
+                 <span class='tag-wrap'><span class="detail-tag">服务时间</span></span>
+                <span class="detail-span">{{ detail.service_time }}</span>
+              </p>
+              <p class='detail-p'>
+                 <span class='tag-wrap'><span class="detail-tag">城市</span></span>
+                <span class="detail-span">{{ detail.city }}</span>
+              </p>
+              <p class='detail-p'>
+                 <span class='tag-wrap'><span class="detail-tag">区县</span></span>
+                <span class="detail-span">{{ detail.district }}</span>
+              </p>
+              <p class='detail-p {{ detail.street !== "NULL" && detail.street !== "" }}'>
+                 <span class='tag-wrap'><span class="detail-tag">街道</span></span>
+                <span class="detail-span">{{ detail.street }}</span>
+              </p>
+              <p class='detail-p {{ detail.community !== "NULL" && detail.community !== "" }}'>
+                 <span class='tag-wrap'><span class="detail-tag">社区</span></span>
+                <span class="detail-span">{{ detail.community }}</span>
+              </p>
+              <p class='detail-p'>
+                 <span class='tag-wrap'><span class="detail-tag">详细地址</span></span>
+                <span class="detail-span">{{ detail.address }}</span>
+              </p>
+              <p class='detail-p'>
+                 <span class='tag-wrap'><span class="detail-tag">坐标</span></span>
+                <span class="detail-span">{{ detail.longitude }} {{ detail.latitude }}</span>
+              </p>
+              <p class='detail-p'>
+                 <span class='tag-wrap'><span class="detail-tag">坐标地址:</span></span>
+                <span class="detail-span">{{ detail.format_addr }}</span>
+              </p>
+            </div>
+          </div>
+          <div class="detail-comment">
+            <div class="comment-ul">
+              <p class='detail-li-h6'><span></span>评论列表</p>
+              <div class='comment-li' wx:for="{{ commentList }}" 
+                wx:key="index">
+                <image class="comment-user" src='../../images/profile.png'></image>
+                <p class="comment-right">
+                  <span class="comment-nickname">{{ item.openid }}</span>
+                  <span class="comment-span">{{ item.comment }}</span>
+                </p>
+              </div>
+              <p class="moreloading {{ moreloading }}">
+                <image src="../../images/loading.gif"></image>
+              </p>
+              <p class="empty-tip {{ commentList.length === 0 }}">
+                <image src='../../images/empty.png'></image>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="comment-fixed">
+          <p class="comment-p">
+            <input wx:if='{{ loading === false }}' bindinput='bindCommentInput' bindconfirm="addComment" class="comment-input" fixed="true" auto-height='false' rows="3" placeholder='发条友善的评论'/>
+          </p>
+        </div>
+      </div>
+    </view>
+    <view class="guide-view" hidden='{{ guidehide }}'>
+      <div class="guide-steps">
+        <div class="guide-step">
+          <image class="step-start" src="../../images/start.png"></image>
+          <p class="step-ins">起点</p>
+        </div>
+        <div wx:for="{{ currRoute.steps}}"
+        wx:key="index"
+        class="guide-step">
+          <image wx:if="{{ item.act_desc ==='直行' }}" class="step-goahead" src="../../images/goahead.png"></image>
+          <image wx:elif="{{ item.act_desc ==='右转' }}" class="step-turnright" src="../../images/turnright.png"></image>
+           <image wx:elif="{{ item.act_desc ==='偏右转' }}" class="step-biasright" src="../../images/biasright.png"></image>
+          <image wx:elif="{{ item.act_desc ==='左转' }}" class="step-turnleft" src="../../images/turnright.png"></image>
+          <image wx:elif="{{ item.act_desc ==='偏左转' }}"class="step-biasleft" src="../../images/biasright.png"></image>
+          <image wx:else="{{ item.act_desc ==='' }}" class="step-goahead" src="../../images/goahead.png"></image>
+          <p class="step-ins">{{ item.instruction }}</p>
+        </div>
+        <div class="guide-step">
+          <image class="step-end" src="../../images/tent.png"></image>
+          <p class="step-ins">{{ detail.name || '终点' }}</p>
+        </div>
+      </div>
+    </view>
+    <view class="profile-view" hidden='{{ profilehide }}'>
+      <div class='profile-wrap'>
+        <div class="profile-header-wrap">
+          <image class='profile-back' bindtap="toMap" src='../../images/back.png'></image>
+          <div class="profile-wall"><open-data type="userAvatarUrl"></open-data></div>
+          <div class='profile-header'>
+            <div class="profile-photo"><open-data type="userAvatarUrl" ></open-data></div>
+            <div class="profile-name"><open-data type="userNickName"></open-data></div>
+          </div>
+        </div>
+        <div class="wrap-list">
+          <div class="empty-tip {{ collectList.length === 0 }}">
+            <image src='../../images/empty.png'></image>
+            <span class="empty-text">收藏列表为空</span>
+          </div>
+          <div class='wrap-item'
+              wx:for="{{ collectList }}" 
+              wx:key="index"
+              bindtap='moveToSelected'
+              data-id='{{ index }}' >
+            <image src='../../images/tent.png' class='item-img'></image>
+            <div class='item-div'>
+              <p class='item-name'>{{ item.name }}</p>
+              <p class='item-addr'>{{ item.full_address }}</p>
+            </div>
+          </div>
+          <p class="moreloading {{ moreloading }}">
+            <image src="../../images/loading.gif"></image>
+          </p>
+        </div>
+      </div>
+    </view>
+</view>

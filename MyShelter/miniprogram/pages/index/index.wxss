@@ -1,0 +1,22 @@
+@import "../../style/detail.wxss";
+@import "../../style/guide.wxss";
+@import "../../style/map.wxss";
+@import "../../style/profile.wxss";
+@import "../../style/search.wxss";
+
+view {
+  width: 100%;
+  background: antiquewhite;
+}
+
+map {
+  width: 100%;
+  height: calc(100vh - 68px);
+}
+.container {
+  min-height: 100vh;
+}
+.false {
+  display: none !important;
+  opacity:0;
+}

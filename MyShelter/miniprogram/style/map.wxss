@@ -1,0 +1,60 @@
+/* map section */
+.detect-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.map-cover {
+  height: 36px;
+  width: 36px;
+  margin-top: 16px;
+}
+.map-detect-img {
+  /* padding: 6px 6px; */
+  height: 36px;
+  width: 36px;
+  background: #5baca1;
+  border-radius: 50%;
+}
+.left-cover-wrap {
+  position:absolute;
+  bottom: 66px;
+  left: 10px;
+}
+.right-cover-wrap {
+  position:absolute;
+  bottom: 88px;
+  right: 10px;
+}
+.map-profile-img {
+  height: 36px;
+  width: 36px;
+  background: #fff;
+  border-radius: 50%;
+}
+.map-start-img {
+  padding: 3px;
+  height: 30px;
+  width: 30px;
+  background: #fff;
+  /* background: rgb(91, 172, 161); */
+  border-radius: 50%;
+}
+
+.map-start-img.start-active{
+  background: rgb(91, 172, 161);
+}
+.map-location-img {
+  height: 36px;
+  width: 36px;
+  background: #fff;
+  border-radius: 50%;
+}
+.startpoint-cover-wrap {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  width: 100%;
+  bottom: 50%;
+}
